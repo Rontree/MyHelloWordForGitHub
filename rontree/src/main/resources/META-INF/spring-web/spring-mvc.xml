@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-3.2.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- 自动扫描且只扫描@Controller 
+	<context:component-scan base-package="com.yitai.front" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+	</context:component-scan>
+	-->
+	
+	<!-- MVC -->
+	<mvc:default-servlet-handler />
+	<mvc:annotation-driven >
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html</value>
+						<value>text/plain;charset=UTF-8</value>  
+	        			<value>*/*</value>  
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+		<!-- 是否在匹配模式时使用后缀模式匹配(" .*") 如果启用了映射到“/users”的方法，则匹配到“/users.*”。默认为true-->
+        <mvc:path-matching suffix-pattern="false" />
+	</mvc:annotation-driven>
+	
+	<!-- 定义JSP文件的位置  -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<!-- 定义无需Controller的url<->view直接映射 -->
+	<mvc:view-controller path="/" view-name="redirect:/login/index" />
+	<!-- 文件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" >
+		<property name="maxUploadSize" value="20971520"/><!-- 最大限制  20M-->
+	</bean>
+		
+</beans>
